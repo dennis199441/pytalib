@@ -5,3 +5,12 @@ pytalib.egg-info/PKG-INFO
 pytalib.egg-info/SOURCES.txt
 pytalib.egg-info/dependency_links.txt
 pytalib.egg-info/top_level.txt
+pytalib/indicators/__init__.py
+pytalib/indicators/base.py
+pytalib/indicators/momentum.py
+pytalib/indicators/trend.py
+pytalib/indicators/volatility.py
+pytalib/indicators/volume.py
+pytalib/test/__init__.py
+pytalib/test/test_momentum.py
+pytalib/test/test_trend.py
