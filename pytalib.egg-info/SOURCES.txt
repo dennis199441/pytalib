@@ -1,0 +1,7 @@
+setup.cfg
+setup.py
+pytalib/__init__.py
+pytalib.egg-info/PKG-INFO
+pytalib.egg-info/SOURCES.txt
+pytalib.egg-info/dependency_links.txt
+pytalib.egg-info/top_level.txt
