@@ -1,8 +1,8 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
 	name='pytalib',
-	packages=['pytalib'],
+	packages=find_packages(),
 	description='Python Technical Analysis Library',
 	version='0.0.1',
 	url='https://github.com/dennis199441/pytalib',
