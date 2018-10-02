@@ -1,4 +1,4 @@
-from .base import VolatilityIndicator, AbstractIndicator
+from .base import VolatilityIndicator, AbstractIndicators
 from .trend import SimpleMovingAverage, WeightedMovingAverage, ExponentialMovingAverage
 import statistics
 
@@ -47,7 +47,7 @@ class AverageTrueRange(VolatilityIndicator):
 
 		return self.atr
 
-class BollingerBands(AbstractIndicator):
+class BollingerBands(AbstractIndicators):
 
 	def __init__(self, prices=[], period=3, ma_type='SMA', num_std=2):
 		self.period = period
@@ -105,7 +105,7 @@ class BollingerBands(AbstractIndicator):
 
 		return (self.bb_up, self.ma, self.bb_down)
 
-class DonchianChannel(AbstractIndicator):
+class DonchianChannel(AbstractIndicators):
 
 	def __init__(self, prices, high, low, period):
 		self.high = high
@@ -163,7 +163,7 @@ class DonchianChannel(AbstractIndicator):
 
 		return (self.dc_up, self.dc_mid, self.dc_down)
 
-class KeltnerChannel(AbstractIndicator):
+class KeltnerChannel(AbstractIndicators):
 
 	def __init__(self, prices, ma_type='EMA', ma_period=20, atr_period=10, num_atr=2, atr_ma_type='SMA'):
 		self.ma_type = ma_type

@@ -1,4 +1,4 @@
-from .base import MomentumIndicator, AbstractIndicator
+from .base import MomentumIndicator, AbstractIndicators
 from .trend import SimpleMovingAverage, ExponentialMovingAverage
 
 class RateOfChange(MomentumIndicator):
@@ -114,7 +114,7 @@ class RelativeStrengthIndex(MomentumIndicator):
 
 		return self.rsi
 
-class StochasticOscillator(AbstractIndicator):
+class StochasticOscillator(AbstractIndicators):
 	
 	def __init__(self, prices=[], high=[], low=[], k_period=5, d_period=3):
 		self.high = high
@@ -190,7 +190,7 @@ class StochasticOscillator(AbstractIndicator):
 
 		return (self.get_stc(), self.get_stc_sma())
 
-class MoneyFlowIndex(AbstractIndicator):
+class MoneyFlowIndex(AbstractIndicators):
 	
 	def __init__(self, prices=[], high=[], low=[], volume=[], period=14):
 		self.high = high
@@ -326,7 +326,7 @@ class MoneyFlowIndex(AbstractIndicator):
 
 		return self.mfi
 
-class TrueStrengthIndex(AbstractIndicator):
+class TrueStrengthIndex(AbstractIndicators):
 
 	def __init__(self, prices=[], r_period=25, s_period=13):
 		self.r_period = r_period
@@ -402,7 +402,7 @@ class TrueStrengthIndex(AbstractIndicator):
 
 		return self.tsi
 
-class UltimateOscillator(AbstractIndicator):
+class UltimateOscillator(AbstractIndicators):
 	
 	def __init__(self, prices=[], high=[], low=[], s_period=7, m_period=14, l_period=28, s_weight=4, m_weight=2, l_weight=1):
 		self.high = high
@@ -524,7 +524,7 @@ class UltimateOscillator(AbstractIndicator):
 
 		return self.uo
 
-class Williams(AbstractIndicator):
+class Williams(AbstractIndicators):
 	
 	def __init__(self, prices=[], high=[], low=[], period=14):
 		self.high = high
@@ -575,7 +575,7 @@ class Williams(AbstractIndicator):
 		
 		return self.williams
 
-class KnowSureThingOscillator(AbstractIndicator):
+class KnowSureThingOscillator(AbstractIndicators):
 
 	def __init__(self, prices=[], ss_roc_period=10, s_roc_period=15, m_roc_period=20, l_roc_period=30, ss_ma_period=10
 			, s_ma_period=10, m_ma_period=10, l_ma_period=15, ss_weight=1, s_weight=2, m_weight=3, l_weight=4, signal_period=9):
