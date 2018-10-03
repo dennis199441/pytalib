@@ -1,6 +1,6 @@
-from .base import AbstractIndicators, AbstractMovingAverages
+from .base import AbstractIndicator, AbstractMovingAverages
 
-class MovingAverageConvergenceDivergence(AbstractIndicators):
+class MovingAverageConvergenceDivergence(AbstractIndicator):
 
 	def __init__(self, prices=[], f_ema_period=12, s_ema_period=26, signal_period=9):
 		self.f_ema_period = f_ema_period
@@ -174,7 +174,7 @@ class Trix(AbstractMovingAverages):
 
 		return self.trix
 
-class AverageDirectionalIndex(AbstractIndicators):
+class AverageDirectionalIndex(AbstractIndicator):
 	
 	def __init__(self, prices=[], high=[], low=[], period=14):
 		self.high = high
@@ -203,7 +203,7 @@ class AverageDirectionalIndex(AbstractIndicators):
 		if self.period is None or self.period <= 0:
 			self.messages.append("`period` cannot be None.")
 
-		if len(self.prices) != len(self.high) and len(self.high) != len(self.low):
+		if len(self.prices) != len(self.high) or len(self.high) != len(self.low):
 			self.messages.append("`prices`, `high`, `low` must have the same length.")
 
 		if self.period > len(self.prices) or self.period > len(self.high) or self.period > len(self.low):
@@ -382,7 +382,7 @@ class AverageDirectionalIndex(AbstractIndicators):
 
 		return self.get_adx()
 
-class CommodityChannelIndex(AbstractIndicators):
+class CommodityChannelIndex(AbstractIndicator):
 	
 	def __init__(self, prices=[], high=[], low=[], period=14, cci_constant=0.015):
 		self.high = high
@@ -416,7 +416,7 @@ class CommodityChannelIndex(AbstractIndicators):
 		if self.period is None or self.period <= 0:
 			self.messages.append("`period` cannot be None.")
 
-		if len(self.prices) != len(self.high) and len(self.high) != len(self.low):
+		if len(self.prices) != len(self.high) or len(self.high) != len(self.low):
 			self.messages.append("`prices`, `high`, `low` must have the same length.")
 
 		if self.period > len(self.prices) or self.period > len(self.high) or self.period > len(self.low):
@@ -495,7 +495,7 @@ class DetrendedPriceOscillator(AbstractMovingAverages):
 
 		return self.dpo
 
-class MassIndex(AbstractIndicators):
+class MassIndex(AbstractIndicator):
 	
 	def __init__(self, prices=[], high=[], low=[], mi_period=25, ema_period=9):
 		self.high = high
@@ -520,7 +520,7 @@ class MassIndex(AbstractIndicators):
 		if self.ema_period is None or self.ema_period <= 0:
 			self.messages.append("`ema_period` cannot be None.")
 
-		if len(self.prices) != len(self.high) and len(self.high) != len(self.low):
+		if len(self.prices) != len(self.high) or len(self.high) != len(self.low):
 			self.messages.append("`prices`, `high`, `low` must have the same length.")
 
 		if self.mi_period > len(self.prices) or self.mi_period > len(self.high) or self.mi_period > len(self.low):
@@ -562,7 +562,7 @@ class MassIndex(AbstractIndicators):
 		
 		return self.mi
 
-class VortexIndicator(AbstractIndicators):
+class VortexIndicator(AbstractIndicator):
 	
 	def __init__(self, prices=[], high=[], low=[], period=21):
 		self.high = high
@@ -603,7 +603,7 @@ class VortexIndicator(AbstractIndicators):
 		if self.period is None or self.period <= 0:
 			self.messages.append("`period` cannot be None.")
 
-		if len(self.prices) != len(self.high) and len(self.high) != len(self.low):
+		if len(self.prices) != len(self.high) or len(self.high) != len(self.low):
 			self.messages.append("`prices`, `high`, `low` must have the same length.")
 
 		if self.period > len(self.prices) or self.period > len(self.high) or self.period > len(self.low):

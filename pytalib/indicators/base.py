@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class AbstractIndicators(ABC):
+class AbstractIndicator(ABC):
 
 	def __init__(self, prices=[]):
 		self.prices = prices
@@ -25,7 +25,7 @@ class AbstractIndicators(ABC):
 	def calculate(self):
 		pass
 
-class AbstractMovingAverages(AbstractIndicators):
+class AbstractMovingAverages(AbstractIndicator):
 
 	def __init__(self, prices=[], period=0):
 		self.period = period
@@ -45,7 +45,7 @@ class AbstractMovingAverages(AbstractIndicators):
 		if len(self.messages) > 0:
 			raise Exception(", ".join(self.messages))
 
-class MomentumIndicator(AbstractIndicators):
+class MomentumIndicator(AbstractIndicator):
 
 	def __init__(self, prices=[], period=0):
 		self.period = period
@@ -65,7 +65,7 @@ class MomentumIndicator(AbstractIndicators):
 		if len(self.messages) > 0:
 			raise Exception(", ".join(self.messages))
 
-class VolatilityIndicator(AbstractIndicators):
+class VolatilityIndicator(AbstractIndicator):
 
 	def __init__(self, prices=[], period=0):
 		self.period = period
@@ -85,7 +85,7 @@ class VolatilityIndicator(AbstractIndicators):
 		if len(self.messages) > 0:
 			raise Exception(", ".join(self.messages))
 
-class VolumeIndicator(AbstractIndicators):
+class VolumeIndicator(AbstractIndicator):
 
 	def __init__(self, prices=[], period=0):
 		self.period = period

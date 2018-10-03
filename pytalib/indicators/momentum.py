@@ -1,4 +1,4 @@
-from .base import MomentumIndicator, AbstractIndicators
+from .base import MomentumIndicator, AbstractIndicator
 from .trend import SimpleMovingAverage, ExponentialMovingAverage
 
 class RateOfChange(MomentumIndicator):
@@ -114,7 +114,7 @@ class RelativeStrengthIndex(MomentumIndicator):
 
 		return self.rsi
 
-class StochasticOscillator(AbstractIndicators):
+class StochasticOscillator(AbstractIndicator):
 	
 	def __init__(self, prices=[], high=[], low=[], k_period=5, d_period=3):
 		self.high = high
@@ -190,7 +190,7 @@ class StochasticOscillator(AbstractIndicators):
 
 		return (self.get_stc(), self.get_stc_sma())
 
-class MoneyFlowIndex(AbstractIndicators):
+class MoneyFlowIndex(AbstractIndicator):
 	
 	def __init__(self, prices=[], high=[], low=[], volume=[], period=14):
 		self.high = high
@@ -235,7 +235,7 @@ class MoneyFlowIndex(AbstractIndicators):
 		if self.volume is None or len(self.volume) == 0:
 			self.messages.append("`volume` cannot be None or empty.")
 
-		if len(self.prices) != len(self.high) and len(self.high) != len(self.low) and len(self.low) != len(self.volume):
+		if len(self.prices) != len(self.high) or len(self.high) != len(self.low) or len(self.low) != len(self.volume):
 			self.messages.append("`prices`, `high`, `low`, `volume` must have the same length.")
 
 		if self.period is None or self.period <= 0:
@@ -326,7 +326,7 @@ class MoneyFlowIndex(AbstractIndicators):
 
 		return self.mfi
 
-class TrueStrengthIndex(AbstractIndicators):
+class TrueStrengthIndex(AbstractIndicator):
 
 	def __init__(self, prices=[], r_period=25, s_period=13):
 		self.r_period = r_period
@@ -402,7 +402,7 @@ class TrueStrengthIndex(AbstractIndicators):
 
 		return self.tsi
 
-class UltimateOscillator(AbstractIndicators):
+class UltimateOscillator(AbstractIndicator):
 	
 	def __init__(self, prices=[], high=[], low=[], s_period=7, m_period=14, l_period=28, s_weight=4, m_weight=2, l_weight=1):
 		self.high = high
@@ -441,7 +441,7 @@ class UltimateOscillator(AbstractIndicators):
 		if self.low is None or len(self.low) == 0:
 			self.messages.append("`low` cannot be None or empty.")
 
-		if len(self.prices) != len(self.high) and len(self.high) != len(self.low):
+		if len(self.prices) != len(self.high) or len(self.high) != len(self.low):
 			self.messages.append("`prices`, `high`, `low` must have the same length.")
 
 		if self.s_period is None or self.s_period <= 0:
@@ -524,7 +524,7 @@ class UltimateOscillator(AbstractIndicators):
 
 		return self.uo
 
-class Williams(AbstractIndicators):
+class Williams(AbstractIndicator):
 	
 	def __init__(self, prices=[], high=[], low=[], period=14):
 		self.high = high
@@ -552,7 +552,7 @@ class Williams(AbstractIndicators):
 		if self.period is None or self.period <= 0:
 			self.messages.append("`period` cannot be None.")
 
-		if len(self.prices) != len(self.high) and len(self.high) != len(self.low):
+		if len(self.prices) != len(self.high) or len(self.high) != len(self.low):
 			self.messages.append("`prices`, `high`, `low` must have the same length.")
 
 		if self.period > len(self.prices) or self.period > len(self.high) or self.period > len(self.low):
@@ -575,7 +575,7 @@ class Williams(AbstractIndicators):
 		
 		return self.williams
 
-class KnowSureThingOscillator(AbstractIndicators):
+class KnowSureThingOscillator(AbstractIndicator):
 
 	def __init__(self, prices=[], ss_roc_period=10, s_roc_period=15, m_roc_period=20, l_roc_period=30, ss_ma_period=10
 			, s_ma_period=10, m_ma_period=10, l_ma_period=15, ss_weight=1, s_weight=2, m_weight=3, l_weight=4, signal_period=9):
