@@ -406,15 +406,3 @@ class PutCallRatio(AbstractIndicator):
 			self.pc_ratio.append(round(self.put_volume[i] / self.call_volume[i] , 2))
 
 		return self.pc_ratio
-
-
-class VolumePriceTrend(VolumeIndicator):
-
-	def reset(self, prices):
-		pass
-	
-	def calculate(self):
-		return 0
-
-
-
