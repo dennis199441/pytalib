@@ -4,22 +4,20 @@ from .momentum import RateOfChange
 
 class AccumulationDistributionLine(AbstractIndicator):
 
-	def __init__(self, prices, high, low, volume, period):
+	def __init__(self, prices, high, low, volume):
 		self.high = high
 		self.low = low
 		self.volume = volume
-		self.period
 		self.mf_multiplier = []
 		self.mf_volume = []
 		self.adl = []
 		super().__init__(prices)
 
-	def reset(self, prices, high, low, volume, period):
+	def reset(self, prices, high, low, volume):
 		self.prices = prices
 		self.high = high
 		self.low = low
 		self.volume = volume
-		self.period
 		self.mf_multiplier = []
 		self.mf_volume = []
 		self.adl = []
@@ -36,14 +34,8 @@ class AccumulationDistributionLine(AbstractIndicator):
 		if self.volume is None or len(self.volume) == 0:
 			self.messages.append("`volume` cannot be None or empty.")
 
-		if self.period is None or self.period <= 0:
-			self.messages.append("`period` cannot be None.")
-
 		if len(self.prices) != len(self.high) or len(self.high) != len(self.low) or len(self.low) != len(self.volume):
 			self.messages.append("`prices`, `high`, `low`, `volume` must have the same length.")
-
-		if self.period > len(self.prices) or self.period > len(self.high) or self.period > len(self.low) or self.period > len(self.volume):
-			self.messages.append("`period` cannot be greater than length of `prices`, `high`, `low` and `volume`.")
 
 		if len(self.messages) > 0:
 			raise Exception(", ".join(self.messages))
@@ -84,7 +76,7 @@ class AccumulationDistributionLine(AbstractIndicator):
 
 class EaseOfMovement(AbstractIndicator):
 
-	def __init__(self, prices, high, low, volume, period, ma_type='SMA'):
+	def __init__(self, prices, high, low, volume, period=14, ma_type='SMA'):
 		self.high = high
 		self.low = low
 		self.volume = volume
@@ -96,7 +88,7 @@ class EaseOfMovement(AbstractIndicator):
 		self.period_emv = []
 		super().__init__(prices)
 
-	def reset(self, prices, high, low, volume, period, ma_type='SMA'):
+	def reset(self, prices, high, low, volume, period=14, ma_type='SMA'):
 		self.prices = prices
 		self.high = high
 		self.low = low
@@ -185,7 +177,7 @@ class EaseOfMovement(AbstractIndicator):
 
 class ForceIndex(AbstractIndicator):
 
-	def __init__(self, prices, volume, period, ma_type='EMA'):
+	def __init__(self, prices, volume, period=13, ma_type='EMA'):
 		self.volume = volume
 		self.period = period
 		self.ma_type = ma_type
@@ -193,7 +185,7 @@ class ForceIndex(AbstractIndicator):
 		self.period_fi = []
 		super().__init__(prices)
 
-	def reset(self, prices, volume, period, ma_type='EMA'):
+	def reset(self, prices, volume, period=13, ma_type='EMA'):
 		self.prices = prices
 		self.volume = volume
 		self.period = period
@@ -252,14 +244,14 @@ class ForceIndex(AbstractIndicator):
 
 class NegativeVolumeIndex(AbstractIndicator):
 
-	def __init__(self, prices, volume, period, ma_type='EMA'):
+	def __init__(self, prices, volume, period=255, ma_type='EMA'):
 		self.volume = volume
 		self.period = period
 		self.nvi = []
 		self.signal = []
 		super().__init__(prices)
 
-	def reset(self, prices, volume, period, ma_type='EMA'):
+	def reset(self, prices, volume, period=255, ma_type='EMA'):
 		self.prices = prices
 		self.volume = volume
 		self.period = period

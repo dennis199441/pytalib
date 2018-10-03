@@ -116,7 +116,7 @@ class RelativeStrengthIndex(MomentumIndicator):
 
 class StochasticOscillator(AbstractIndicator):
 	
-	def __init__(self, prices=[], high=[], low=[], k_period=5, d_period=3):
+	def __init__(self, prices=[], high=[], low=[], k_period=14, d_period=3):
 		self.high = high
 		self.low = low
 		self.k_period = k_period
@@ -125,7 +125,7 @@ class StochasticOscillator(AbstractIndicator):
 		self.stc_sma = []
 		super().__init__(prices)
 
-	def reset(self, prices=[], high=[], low=[], k_period=5, d_period=3):
+	def reset(self, prices=[], high=[], low=[], k_period=14, d_period=3):
 		self.prices = prices
 		self.high = high
 		self.low = low

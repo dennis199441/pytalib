@@ -4,13 +4,13 @@ import statistics
 
 class AverageTrueRange(VolatilityIndicator):
 
-	def __init__(self, prices, period, ma_type='SMA'):
+	def __init__(self, prices, period=14, ma_type='SMA'):
 		self.tr = []
 		self.atr = []
 		self.ma_type = ma_type
 		super().__init__(prices, period)
 
-	def reset(self, prices, period):
+	def reset(self, prices, period=14):
 		self.prices = prices
 		self.period = period
 		self.tr = []
@@ -49,7 +49,7 @@ class AverageTrueRange(VolatilityIndicator):
 
 class BollingerBands(AbstractIndicator):
 
-	def __init__(self, prices=[], period=3, ma_type='SMA', num_std=2):
+	def __init__(self, prices=[], period=20, ma_type='SMA', num_std=2):
 		self.period = period
 		self.num_std = num_std
 		self.ma_type = ma_type
@@ -58,7 +58,7 @@ class BollingerBands(AbstractIndicator):
 		self.ma = []
 		super().__init__(prices)
 
-	def reset(self, prices, period=3, ma_type='SMA', num_std=2):
+	def reset(self, prices, period=20, ma_type='SMA', num_std=2):
 		self.prices = prices
 		self.period = period
 		self.num_std = num_std
@@ -105,25 +105,25 @@ class BollingerBands(AbstractIndicator):
 
 		return (self.bb_up, self.ma, self.bb_down)
 
-class DonchianChannel(AbstractIndicator):
+class PriceChannel(AbstractIndicator):
 
-	def __init__(self, prices, high, low, period):
+	def __init__(self, prices, high, low, period=20):
 		self.high = high
 		self.low = low
 		self.period = period
-		self.dc_up = []
-		self.dc_mid = []
-		self.dc_down = []
+		self.pc_up = []
+		self.pc_mid = []
+		self.pc_down = []
 		super().__init__(prices)
 
-	def reset(self, prices, high, low, period):
+	def reset(self, prices, high, low, period=20):
 		self.prices = prices
 		self.high = high
 		self.low = low
 		self.period = period
-		self.dc_up = []
-		self.dc_mid = []
-		self.dc_down = []
+		self.pc_up = []
+		self.pc_mid = []
+		self.pc_down = []
 
 	def validate(self):
 		self._validate()
@@ -147,8 +147,8 @@ class DonchianChannel(AbstractIndicator):
 			raise Exception(", ".join(self.messages))
 
 	def calculate(self):
-		if len(self.dc_up) != 0 and len(self.dc_down) != 0 and len(self.dc_mid) != 0:
-			return (self.dc_up, self.dc_mid, self.dc_down)
+		if len(self.pc_up) != 0 and len(self.pc_down) != 0 and len(self.pc_mid) != 0:
+			return (self.pc_up, self.pc_mid, self.pc_down)
 		
 		self.validate()
 
@@ -157,11 +157,11 @@ class DonchianChannel(AbstractIndicator):
 			if i < self.period - 1:
 				start = 0
 
-			self.dc_up.append(max(self.high[start : i + 1]))
-			self.dc_down.append(min(self.low[start : i + 1]))
-			self.dc_mid.append((self.dc_up[i] + self.dc_down[i]) / 2)
+			self.pc_up.append(max(self.high[start : i + 1]))
+			self.pc_down.append(min(self.low[start : i + 1]))
+			self.pc_mid.append((self.pc_up[i] + self.pc_down[i]) / 2)
 
-		return (self.dc_up, self.dc_mid, self.dc_down)
+		return (self.pc_up, self.pc_mid, self.pc_down)
 
 class KeltnerChannel(AbstractIndicator):
 
@@ -231,11 +231,11 @@ class KeltnerChannel(AbstractIndicator):
 
 class StandardDeviation(VolatilityIndicator):
 
-	def __init__(self, prices, period):
+	def __init__(self, prices, period=20):
 		self.std = []
 		super().__init__(prices, period)
 
-	def reset(self, prices, period):
+	def reset(self, prices, period=20):
 		self.prices = prices
 		self.period = period
 		self.std = []

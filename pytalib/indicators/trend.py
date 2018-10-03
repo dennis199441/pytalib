@@ -65,11 +65,11 @@ class MovingAverageConvergenceDivergence(AbstractIndicator):
 
 class SimpleMovingAverage(AbstractMovingAverages):
 	
-	def __init__(self, prices=[], period=0):
+	def __init__(self, prices=[], period=20):
 		self.sma = []
 		super().__init__(prices, period)
 
-	def reset(self, prices, period):
+	def reset(self, prices, period=20):
 		self.prices = prices
 		self.period = period
 		self.sma = []
@@ -90,11 +90,11 @@ class SimpleMovingAverage(AbstractMovingAverages):
 
 class WeightedMovingAverage(AbstractMovingAverages):
 
-	def __init__(self, prices=[], period=0):
+	def __init__(self, prices=[], period=20):
 		self.wma = []
 		super().__init__(prices, period)
 
-	def reset(self, prices, period):
+	def reset(self, prices, period=20):
 		self.prices = prices
 		self.period = period
 		self.wma = []
@@ -119,11 +119,11 @@ class WeightedMovingAverage(AbstractMovingAverages):
 
 class ExponentialMovingAverage(AbstractMovingAverages):
 
-	def __init__(self, prices=[], period=0):
+	def __init__(self, prices=[], period=20):
 		self.ema = []
 		super().__init__(prices, period)
 
-	def reset(self, prices, period):
+	def reset(self, prices, period=20):
 		self.prices = prices
 		self.period = period
 		self.ema = []
@@ -145,11 +145,11 @@ class ExponentialMovingAverage(AbstractMovingAverages):
 
 class Trix(AbstractMovingAverages):
 
-	def __init__(self, prices=[], period=0):
+	def __init__(self, prices=[], period=15):
 		self.trix = []
 		super().__init__(prices, period)
 
-	def reset(self, prices, period):
+	def reset(self, prices, period=15):
 		self.prices = prices
 		self.period = period
 		self.trix = []
@@ -394,7 +394,7 @@ class CommodityChannelIndex(AbstractIndicator):
 		self.cci = []
 		super().__init__(prices)
 
-	def reset(self, prices, high, low, period, cci_constant=0.015):
+	def reset(self, prices, high, low, period=14, cci_constant=0.015):
 		self.prices = prices
 		self.high = high
 		self.low = low
