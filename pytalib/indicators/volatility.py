@@ -1,21 +1,38 @@
-from .base import VolatilityIndicator, AbstractIndicator
+from .base import VolatilityIndicator, AbstractPriceIndicator, AbstractHighLowPriceIndicator
 from .trend import SimpleMovingAverage, WeightedMovingAverage, ExponentialMovingAverage
 import statistics
 
-class AverageTrueRange(VolatilityIndicator):
+class AverageTrueRange(AbstractHighLowPriceIndicator):
 
-	def __init__(self, prices, period=14, ma_type='SMA'):
-		self.tr = []
-		self.atr = []
-		self.ma_type = ma_type
-		super().__init__(prices, period)
-
-	def reset(self, prices, period=14):
-		self.prices = prices
+	def __init__(self, prices, high, low, period=14, ma_type='SMA'):
 		self.period = period
 		self.tr = []
 		self.atr = []
-		self.ma_type
+		self.ma_type = ma_type
+		super().__init__(prices, high, low)
+
+	def validate(self):
+		self._validate()
+
+		if self.period is None:
+			self.messages.append("`period` cannot be None.")
+		else:
+			if self.period < 0:
+				self.messages.append("`period` must be greater than or equal to 0.")
+			if self.prices is not None and len(self.prices) < self.period:
+				self.messages.append("`prices` length must be greater than or equal to `period`.")
+
+		if len(self.messages) > 0:
+			raise Exception(", ".join(self.messages))
+			
+	def reset(self, prices, high, low, period=14, ma_type='SMA'):
+		self.prices = prices
+		self.high = high
+		self.low = low
+		self.period = period
+		self.tr = []
+		self.atr = []
+		self.ma_type = ma_type
 
 	def get_tr(self):
 		if len(self.tr) != 0:
@@ -47,7 +64,7 @@ class AverageTrueRange(VolatilityIndicator):
 
 		return self.atr
 
-class BollingerBands(AbstractIndicator):
+class BollingerBands(AbstractPriceIndicator):
 
 	def __init__(self, prices=[], period=20, ma_type='SMA', num_std=2):
 		self.period = period
@@ -105,16 +122,14 @@ class BollingerBands(AbstractIndicator):
 
 		return (self.bb_up, self.ma, self.bb_down)
 
-class PriceChannel(AbstractIndicator):
+class PriceChannel(AbstractHighLowPriceIndicator):
 
 	def __init__(self, prices, high, low, period=20):
-		self.high = high
-		self.low = low
 		self.period = period
 		self.pc_up = []
 		self.pc_mid = []
 		self.pc_down = []
-		super().__init__(prices)
+		super().__init__(prices, high, low)
 
 	def reset(self, prices, high, low, period=20):
 		self.prices = prices
@@ -128,17 +143,8 @@ class PriceChannel(AbstractIndicator):
 	def validate(self):
 		self._validate()
 
-		if self.high is None or len(self.high) == 0:
-			self.messages.append("`high` cannot be None or empty.")
-
-		if self.low is None or len(self.low) == 0:
-			self.messages.append("`low` cannot be None or empty.")
-
 		if self.period is None or self.period <= 0:
 			self.messages.append("`period` cannot be None.")
-
-		if len(self.prices) != len(self.high) or len(self.high) != len(self.low):
-			self.messages.append("`prices`, `high`, `low` must have the same length.")
 
 		if self.period > len(self.prices) or self.period > len(self.high) or self.period > len(self.low):
 			self.messages.append("`period` cannot be greater than length of `prices`, `high` and `low`.")
@@ -163,7 +169,7 @@ class PriceChannel(AbstractIndicator):
 
 		return (self.pc_up, self.pc_mid, self.pc_down)
 
-class KeltnerChannel(AbstractIndicator):
+class KeltnerChannel(AbstractPriceIndicator):
 
 	def __init__(self, prices, ma_type='EMA', ma_period=20, atr_period=10, num_atr=2, atr_ma_type='SMA'):
 		self.ma_type = ma_type

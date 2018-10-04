@@ -2,9 +2,30 @@ from abc import ABC, abstractmethod
 
 class AbstractIndicator(ABC):
 
+	def __init__(self):
+		self.messages = []
+		super().__init__()
+
+	@abstractmethod
+	def _validate(self):
+		pass
+
+	@abstractmethod
+	def validate(self):
+		pass
+
+	@abstractmethod
+	def reset(self, prices):
+		pass
+
+	@abstractmethod
+	def calculate(self):
+		pass
+
+class AbstractPriceIndicator(AbstractIndicator):
+
 	def __init__(self, prices=[]):
 		self.prices = prices
-		self.messages = []
 		super().__init__()
 
 	def _validate(self):
@@ -25,7 +46,40 @@ class AbstractIndicator(ABC):
 	def calculate(self):
 		pass
 
-class AbstractMovingAverages(AbstractIndicator):
+class AbstractHighLowPriceIndicator(AbstractIndicator):
+	
+	def __init__(self, prices=[], high=[], low=[]):
+		self.prices = prices
+		self.high = high
+		self.low = low
+		self.messages = []
+		super().__init__()
+
+	def _validate(self):
+		if self.prices is None:
+			self.messages.append("`prices` cannot be None.")
+		if self.prices is not None and len(self.prices) == 0:
+			self.messages.append("`prices` cannot be an empty list.")
+		if self.high is None or len(self.high) == 0:
+			self.messages.append("`high` cannot be None or empty.")
+		if self.low is None or len(self.low) == 0:
+			self.messages.append("`low` cannot be None or empty.")
+		if len(self.prices) != len(self.high) or len(self.high) != len(self.low):
+			self.messages.append("`prices`, `high`, `low` must have the same length.")
+
+	@abstractmethod
+	def validate(self):
+		pass
+
+	@abstractmethod
+	def reset(self, prices):
+		pass
+
+	@abstractmethod
+	def calculate(self):
+		pass
+
+class AbstractMovingAverages(AbstractPriceIndicator):
 
 	def __init__(self, prices=[], period=0):
 		self.period = period
@@ -45,7 +99,7 @@ class AbstractMovingAverages(AbstractIndicator):
 		if len(self.messages) > 0:
 			raise Exception(", ".join(self.messages))
 
-class MomentumIndicator(AbstractIndicator):
+class MomentumIndicator(AbstractPriceIndicator):
 
 	def __init__(self, prices=[], period=0):
 		self.period = period
@@ -65,7 +119,7 @@ class MomentumIndicator(AbstractIndicator):
 		if len(self.messages) > 0:
 			raise Exception(", ".join(self.messages))
 
-class VolatilityIndicator(AbstractIndicator):
+class VolatilityIndicator(AbstractPriceIndicator):
 
 	def __init__(self, prices=[], period=0):
 		self.period = period
@@ -85,7 +139,7 @@ class VolatilityIndicator(AbstractIndicator):
 		if len(self.messages) > 0:
 			raise Exception(", ".join(self.messages))
 
-class VolumeIndicator(AbstractIndicator):
+class VolumeIndicator(AbstractPriceIndicator):
 
 	def __init__(self, prices=[], period=0):
 		self.period = period

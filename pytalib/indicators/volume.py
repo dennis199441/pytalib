@@ -1,17 +1,15 @@
-from .base import VolumeIndicator, AbstractIndicator
+from .base import VolumeIndicator, AbstractPriceIndicator, AbstractHighLowPriceIndicator
 from .trend import SimpleMovingAverage, WeightedMovingAverage, ExponentialMovingAverage
 from .momentum import RateOfChange
 
-class AccumulationDistributionLine(AbstractIndicator):
+class AccumulationDistributionLine(AbstractHighLowPriceIndicator):
 
 	def __init__(self, prices, high, low, volume):
-		self.high = high
-		self.low = low
 		self.volume = volume
 		self.mf_multiplier = []
 		self.mf_volume = []
 		self.adl = []
-		super().__init__(prices)
+		super().__init__(prices, high, low)
 
 	def reset(self, prices, high, low, volume):
 		self.prices = prices
@@ -25,16 +23,10 @@ class AccumulationDistributionLine(AbstractIndicator):
 	def validate(self):
 		self._validate()
 
-		if self.high is None or len(self.high) == 0:
-			self.messages.append("`high` cannot be None or empty.")
-
-		if self.low is None or len(self.low) == 0:
-			self.messages.append("`low` cannot be None or empty.")
-
 		if self.volume is None or len(self.volume) == 0:
 			self.messages.append("`volume` cannot be None or empty.")
 
-		if len(self.prices) != len(self.high) or len(self.high) != len(self.low) or len(self.low) != len(self.volume):
+		if len(self.prices) != len(self.volume):
 			self.messages.append("`prices`, `high`, `low`, `volume` must have the same length.")
 
 		if len(self.messages) > 0:
@@ -74,11 +66,9 @@ class AccumulationDistributionLine(AbstractIndicator):
 
 		return self.adl
 
-class EaseOfMovement(AbstractIndicator):
+class EaseOfMovement(AbstractHighLowPriceIndicator):
 
 	def __init__(self, prices, high, low, volume, period=14, ma_type='SMA'):
-		self.high = high
-		self.low = low
 		self.volume = volume
 		self.period = period
 		self.ma_type = ma_type
@@ -86,7 +76,7 @@ class EaseOfMovement(AbstractIndicator):
 		self.box_ratio = []
 		self.emv = []
 		self.period_emv = []
-		super().__init__(prices)
+		super().__init__(prices, high, low)
 
 	def reset(self, prices, high, low, volume, period=14, ma_type='SMA'):
 		self.prices = prices
@@ -103,19 +93,13 @@ class EaseOfMovement(AbstractIndicator):
 	def validate(self):
 		self._validate()
 
-		if self.high is None or len(self.high) == 0:
-			self.messages.append("`high` cannot be None or empty.")
-
-		if self.low is None or len(self.low) == 0:
-			self.messages.append("`low` cannot be None or empty.")
-
 		if self.volume is None or len(self.volume) == 0:
 			self.messages.append("`volume` cannot be None or empty.")
 
 		if self.period is None or self.period <= 0:
 			self.messages.append("`period` cannot be None.")
 
-		if len(self.prices) != len(self.high) or len(self.high) != len(self.low) or len(self.low) != len(self.volume):
+		if len(self.prices) != len(self.volume):
 			self.messages.append("`prices`, `high`, `low`, `volume` must have the same length.")
 
 		if self.period > len(self.prices) or self.period > len(self.high) or self.period > len(self.low) or self.period > len(self.volume):
@@ -175,7 +159,7 @@ class EaseOfMovement(AbstractIndicator):
 
 		return self.period_emv
 
-class ForceIndex(AbstractIndicator):
+class ForceIndex(AbstractPriceIndicator):
 
 	def __init__(self, prices, volume, period=13, ma_type='EMA'):
 		self.volume = volume
@@ -242,7 +226,7 @@ class ForceIndex(AbstractIndicator):
 
 		return self.period_fi
 
-class NegativeVolumeIndex(AbstractIndicator):
+class NegativeVolumeIndex(AbstractPriceIndicator):
 
 	def __init__(self, prices, volume, period=255, ma_type='EMA'):
 		self.volume = volume
@@ -322,7 +306,7 @@ class NegativeVolumeIndex(AbstractIndicator):
 
 		return (self.get_nvi(), self.get_signal())
 
-class OnBalanceVolume(AbstractIndicator):
+class OnBalanceVolume(AbstractPriceIndicator):
 
 	def __init__(self, prices, volume):
 		self.volume = volume
@@ -367,7 +351,7 @@ class OnBalanceVolume(AbstractIndicator):
 
 		return self.obv
 
-class PutCallRatio(AbstractIndicator):
+class PutCallRatio(AbstractPriceIndicator):
 
 	def __init__(self, prices, put_volume, call_volume):
 		self.put_volume = put_volume
