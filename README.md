@@ -1,5 +1,4 @@
 # pytalib
-## Introduction
 Pytalib is a python technical analysis library developed CMSC5720 project group which support various types of technical indicators. Pytalib adapts object oriented paradigm that each indicator is represented as an object. Unlike function-based library, using objects allow us to store some intermediate variables, for example Average gain/loss in RSI. This improves flexibility if we want to do further analysis on indicators.
 
 ## Python version
