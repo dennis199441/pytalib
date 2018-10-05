@@ -5,7 +5,7 @@ Pytalib is a python technical analysis library developed CMSC5720 project group 
 python3.6.4
 
 ## Types of indicators
-#### Trend
+#### Trend indicators
   1. Moving Average Convergence Divergence
   2. Simple Moving Average
   3. Weighted Moving Average
@@ -17,7 +17,7 @@ python3.6.4
   9. Mass Index
   10. Vortex Indicator
   
-#### Momentum
+#### Momentum indicators
   1. Rate of Change
   2. Relative Strength Index
   3. Stochastic Oscillator
@@ -27,14 +27,14 @@ python3.6.4
   7. Williams
   8. Know Sure Thing Oscillator
   
-#### Volatility
+#### Volatility indicators
   1. Average True Range
   2. Bollinger Bands
   3. Price Channel
   4. Keltner Channel
   5. Standard Deviation
   
-#### Volume
+#### Volume indicators
   1. Accumulation Distribution Line
   2. Ease of Movement
   3. Force Index
