@@ -88,10 +88,6 @@ class SimpleMovingAverage(AbstractMovingAverages):
 
 		return self.sma
 
-
-'''
-TODO: Debug calculate()
-'''
 class WeightedMovingAverage(AbstractMovingAverages):
 
 	def __init__(self, prices=[], period=20):
@@ -108,16 +104,28 @@ class WeightedMovingAverage(AbstractMovingAverages):
 			return self.wma
 
 		self.validate()
-		multiplier = 0
 
+		multiplier = []
+		denominator = 0
 		for i in range(1, self.period + 1):
-			multiplier += i
+			multiplier.append(i)
+			denominator += i
 
+		total_price = 0
+		numerator = 0
 		for i in range(len(self.prices)):
-			if i == 0:
-				self.wma.append(self.prices[i])
+			if i < self.period - 1:
+				self.wma.append(0.00)
+			elif i == self.period - 1:
+				total_price = sum(self.prices[i - self.period + 1 : i + 1])
+				numerator = 0
+				for j in range(self.period):
+					numerator += multiplier[j] * self.prices[j]
+				self.wma.append(round(numerator / denominator, 2))
 			else:
-				self.wma.append(round((self.period * self.prices[i] / multiplier) + ((self.period - 1) * self.prices[i - 1] / multiplier), 2))
+				numerator = numerator + self.period * self.prices[i] - total_price
+				total_price = total_price + self.prices[i] - self.prices[i - self.period]
+				self.wma.append(round(numerator / denominator, 2))
 
 		return self.wma
 

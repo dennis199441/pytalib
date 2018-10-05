@@ -126,7 +126,7 @@ class WeightedMovingAverageTest(TestCase):
 	def test_calculate(self):
 		self.indicator.prices = [25000,9000,7000,8000,6000,12000,9000,4000,7000,3000,5000,8000,7800,5000]
 		self.indicator.period = 2
-		expected = [25000, 14333.33,7666.67,7666.67,6666.67,10000,10000,5666.67,6000,4333.33,4333.33,7000,7866.67,5933.33]
+		expected = [0.00, 14333.33,7666.67,7666.67,6666.67,10000,10000,5666.67,6000,4333.33,4333.33,7000,7866.67,5933.33]
 
 		self.assertEqual(expected, self.indicator.calculate())
 
