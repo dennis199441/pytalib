@@ -155,7 +155,7 @@ class StochasticOscillator(AbstractHighLowPriceIndicator):
 			return self.stc
 
 		for i in range(len(self.prices)):
-			if i < self.period:
+			if i < self.k_period:
 				self.stc.append(0.00)
 			else:
 				period_low = min(self.low[i - self.k_period + 1 : i + 1])
@@ -640,24 +640,24 @@ class KnowSureThingOscillator(AbstractPriceIndicator):
 
 		self.validate()
 
-		roc = RateOfChange(self.prices, ss_roc_period)
+		roc = RateOfChange(self.prices, self.ss_roc_period)
 		ss_roc = roc.calculate()
 		sma = SimpleMovingAverage(ss_roc, self.ss_ma_period)
 		ss_ma = sma.calculate()
 
-		roc.reset(self.prices, s_roc_period)
+		roc.reset(self.prices, self.s_roc_period)
 		s_roc = roc.calculate()
 		sma.reset(s_roc, self.s_ma_period)
 		s_ma = sma.calculate()
 
-		roc.reset(self.prices, m_roc_period)
+		roc.reset(self.prices, self.m_roc_period)
 		m_roc = roc.calculate()
-		sma.reset(s_roc, self.m_ma_period)
+		sma.reset(m_roc, self.m_ma_period)
 		m_ma = sma.calculate()
 
-		roc.reset(self.prices, l_roc_period)
+		roc.reset(self.prices, self.l_roc_period)
 		l_roc = roc.calculate()
-		sma.reset(s_roc, self.l_ma_period)
+		sma.reset(l_roc, self.l_ma_period)
 		l_ma = sma.calculate()
 
 		for i in range(len(self.prices)):

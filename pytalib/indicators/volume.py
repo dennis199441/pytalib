@@ -155,7 +155,7 @@ class EaseOfMovement(AbstractHighLowPriceIndicator):
 		self.validate()
 
 		emv = self.get_emv()
-		self.period_emv = self.getma(emv, self.period, self.ma_type).calculate()
+		self.period_emv = self.get_ma(emv, self.period, self.ma_type).calculate()
 
 		return self.period_emv
 
