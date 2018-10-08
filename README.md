@@ -56,4 +56,9 @@ from pytalib.indicators.trend import SimpleMovingAverage
 prices = [1,2,3,4,5,6,7,8,9,10]
 sma = SimpleMovingAverage(prices=prices, period=3)
 result = sma.calculate()
+
+# reuse sma object
+prices2 = [10,9,8,7,6,5,4,3,2,1]
+sma.reset(prices=prices2, period=3)
+result2 = sma.calculate()
 ```
