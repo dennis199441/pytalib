@@ -5,7 +5,10 @@ pytalib/__init__.py
 pytalib.egg-info/PKG-INFO
 pytalib.egg-info/SOURCES.txt
 pytalib.egg-info/dependency_links.txt
+pytalib.egg-info/requires.txt
 pytalib.egg-info/top_level.txt
+pytalib/graph/__init__.py
+pytalib/graph/visibility_graph.py
 pytalib/indicators/__init__.py
 pytalib/indicators/base.py
 pytalib/indicators/momentum.py

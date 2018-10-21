@@ -8,5 +8,8 @@ setup(
 	url='https://github.com/dennis199441/pytalib',
 	author='Dennis Cheung',
 	author_email='dennis199441@gmail.com',
+	install_requires=[
+		'networkx',
+    ],
 	keywords=['pip','dennis','pytalib']
 )
