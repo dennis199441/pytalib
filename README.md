@@ -91,6 +91,5 @@ G = vg.ts2vg_fast(prices)
 nx.draw(G, with_labels=True, font_weight='bold')
 plt.show()
 ```
-visibility graph
 
 <img src="https://github.com/dennis199441/pytalib/blob/master/example/graph.png" width="50%" height="50%">
