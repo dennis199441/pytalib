@@ -48,13 +48,13 @@ Networkx
 ## Visibility Graph Algorithm
 Implementations the following time series-to-graph algorithm which takes the time series as parameter and returns a networkx undirected graph.
 
-  1. ts2vg_basic
+1. ts2vg_basic
   
-  Reference: "From time series to complex networks: The visibility graph" by L. Lacasa, B. Luque, F. Ballesteros, J. Luque, and J. C. Nuno
+Reference: "From time series to complex networks: The visibility graph" by L. Lacasa, B. Luque, F. Ballesteros, J. Luque, and J. C. Nuno
 
-  2. ts2vg_fast
+2. ts2vg_fast
   
-  Reference: "Fast transformation from time series to visibility graphs" by Xin Lan, Hongming Mo, Shiyu Chen, Qi Liu, and Yong Deng
+Reference: "Fast transformation from time series to visibility graphs" by Xin Lan, Hongming Mo, Shiyu Chen, Qi Liu, and Yong Deng
 	
 ## How to install
 Pytalib has not been published on Python Package Index (PyPi) yet. I will update this in the future.
@@ -63,7 +63,8 @@ But basically the procedure is same as follows:
 pip install pytalib
 ```
 
-## How to use 
+## Example Code
+#### Calculate indicators
 ```
 from pytalib.indicators.trend import SimpleMovingAverage
 
@@ -76,3 +77,18 @@ prices2 = [10,9,8,7,6,5,4,3,2,1]
 sma.reset(prices=prices2, period=3)
 result2 = sma.calculate()
 ```
+
+#### Time series-to-Graph transformation
+```
+import networkx as nx
+from pytalib.graph import visibility_graph as vg
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('TkAgg')
+
+prices = [1,3,2,4,5,6,9,8,9,10]
+G = vg.ts2vg_fast(prices)
+nx.draw(G, with_labels=True, font_weight='bold')
+plt.show()
+```
+![visibility_graph](/example/graph.png)
