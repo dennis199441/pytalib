@@ -48,13 +48,13 @@ Networkx
 ## Visibility Graph Algorithm
 Implementations the following time series-to-graph algorithm which takes the time series as parameter and returns a networkx undirected graph.
 
-  1. ts2vg_basic
+1. ts2vg_basic
   
-  Reference: "From time series to complex networks: The visibility graph" by L. Lacasa, B. Luque, F. Ballesteros, J. Luque, and J. C. Nuno
+Reference: "From time series to complex networks: The visibility graph" by L. Lacasa, B. Luque, F. Ballesteros, J. Luque, and J. C. Nuno
 
-  2. ts2vg_fast
+2. ts2vg_fast
   
-  Reference: "Fast transformation from time series to visibility graphs" by Xin Lan, Hongming Mo, Shiyu Chen, Qi Liu, and Yong Deng
+Reference: "Fast transformation from time series to visibility graphs" by Xin Lan, Hongming Mo, Shiyu Chen, Qi Liu, and Yong Deng
 	
 ## How to install
 Pytalib has not been published on Python Package Index (PyPi) yet. I will update this in the future.
