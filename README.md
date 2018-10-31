@@ -63,7 +63,8 @@ But basically the procedure is same as follows:
 pip install pytalib
 ```
 
-## How to use 
+## Example Code
+#### Calculate indicators
 ```
 from pytalib.indicators.trend import SimpleMovingAverage
 
@@ -76,3 +77,18 @@ prices2 = [10,9,8,7,6,5,4,3,2,1]
 sma.reset(prices=prices2, period=3)
 result2 = sma.calculate()
 ```
+
+#### Time series-to-Graph transformation
+```
+import networkx as nx
+from pytalib.graph import visibility_graph as vg
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('TkAgg')
+
+prices = [1,3,2,4,5,6,9,8,9,10]
+G = vg.ts2vg_fast(prices)
+nx.draw(G, with_labels=True, font_weight='bold')
+plt.show()
+```
+![visibility_graph](/example/graph.png)
