@@ -91,4 +91,5 @@ G = vg.ts2vg_fast(prices)
 nx.draw(G, with_labels=True, font_weight='bold')
 plt.show()
 ```
-![visibility_graph](/example/graph.png)
+![visibility_graph](/example/graph.png =320x240)
+
