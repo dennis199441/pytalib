@@ -55,7 +55,11 @@ Reference: "From time series to complex networks: The visibility graph" by L. La
 2. ts2vg_fast
   
 Reference: "Fast transformation from time series to visibility graphs" by Xin Lan, Hongming Mo, Shiyu Chen, Qi Liu, and Yong Deng
-	
+
+3. ts2hvg
+
+Reference: "Horizontal visibility graphs: exact results for random time series" by B. Luque , L. Lacasa, F. Ballesteros and J. Luque
+
 ## How to install
 Pytalib has not been published on Python Package Index (PyPi) yet. I will update this in the future.
 But basically the procedure is same as follows:
@@ -88,8 +92,26 @@ matplotlib.use('TkAgg')
 
 prices = [1,3,2,4,5,6,9,8,9,10]
 G = vg.ts2vg_fast(prices)
-nx.draw(G, with_labels=True, font_weight='bold')
+nx.draw_networkx(G, with_labels=True, font_weight='bold')
+plt.title('visibility graph of prices')
 plt.show()
 ```
 
-<img src="https://github.com/dennis199441/pytalib/blob/master/example/graph.png" width="50%" height="50%">
+<img src="https://github.com/dennis199441/pytalib/blob/master/example/vg.png" width="50%" height="50%">
+
+```
+import networkx as nx
+from pytalib.graph import visibility_graph as vg
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('TkAgg')
+
+prices = [1,3,2,4,5,6,9,8,9,10]
+G = vg.ts2hvg(prices)
+nx.draw_networkx(G, with_labels=True, font_weight='bold')
+plt.title('horizontal visibility graph of prices')
+plt.show()
+```
+
+<img src="https://github.com/dennis199441/pytalib/blob/master/example/hvg.png" width="50%" height="50%">
+
