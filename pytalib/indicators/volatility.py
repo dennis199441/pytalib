@@ -1,6 +1,6 @@
 from .base import VolatilityIndicator, AbstractPriceIndicator, AbstractHighLowPriceIndicator
 from .trend import SimpleMovingAverage, WeightedMovingAverage, ExponentialMovingAverage
-import statistics
+from math import sqrt
 
 class AverageTrueRange(AbstractHighLowPriceIndicator):
 
@@ -49,7 +49,7 @@ class AverageTrueRange(AbstractHighLowPriceIndicator):
 	def get_ma(self, series, period, ma_type='SMA'):
 		if ma_type == 'EMA':
 			return ExponentialMovingAverage(series, period)
-		elif ma_type = 'WMA':
+		elif ma_type == 'WMA':
 			return WeightedMovingAverage(series, period)
 
 		return  SimpleMovingAverage(series, period)
@@ -60,7 +60,7 @@ class AverageTrueRange(AbstractHighLowPriceIndicator):
 
 		self.validate()
 
-		self.atr = self.get_ma(self.tr, self.period, self.ma_type).calculate()
+		self.atr = self.get_ma(self.get_tr(), self.period, self.ma_type).calculate()
 
 		return self.atr
 
@@ -87,7 +87,7 @@ class BollingerBands(AbstractPriceIndicator):
 	def get_ma(self, series, period, ma_type='SMA'):
 		if ma_type == 'EMA':
 			return ExponentialMovingAverage(series, period)
-		elif ma_type = 'WMA':
+		elif ma_type == 'WMA':
 			return WeightedMovingAverage(series, period)
 
 		return  SimpleMovingAverage(series, period)
@@ -114,7 +114,7 @@ class BollingerBands(AbstractPriceIndicator):
 		self.validate()
 
 		self.ma = self.get_ma(self.prices, self.period, self.ma_type).calculate()
-		std = StandardDeviation(self.prices, self.period)
+		std = StandardDeviation(self.prices, self.period).calculate()
 
 		for i in range(len(self.prices)):
 			self.bb_up.append(round(self.prices[i] + self.num_std * std[i], 2))
@@ -169,9 +169,9 @@ class PriceChannel(AbstractHighLowPriceIndicator):
 
 		return (self.pc_up, self.pc_mid, self.pc_down)
 
-class KeltnerChannel(AbstractPriceIndicator):
+class KeltnerChannel(AbstractHighLowPriceIndicator):
 
-	def __init__(self, prices, ma_type='EMA', ma_period=20, atr_period=10, num_atr=2, atr_ma_type='SMA'):
+	def __init__(self, prices, high, low, ma_type='EMA', ma_period=20, atr_period=10, num_atr=2, atr_ma_type='SMA'):
 		self.ma_type = ma_type
 		self.ma_period = ma_period
 		self.atr_period = atr_period
@@ -180,9 +180,11 @@ class KeltnerChannel(AbstractPriceIndicator):
 		self.kc_up = []
 		self.ma = []
 		self.kc_down = []
-		super().__init__(prices)
+		super().__init__(prices, high, low)
 
-	def reset(self, prices, ma_type='EMA', ma_period=20, atr_period=10, num_atr=2, atr_ma_type='SMA'):
+	def reset(self, prices, high, low, ma_type='EMA', ma_period=20, atr_period=10, num_atr=2, atr_ma_type='SMA'):
+		self.high = high
+		self.low = low
 		self.prices = prices
 		self.ma_type = ma_type
 		self.ma_period = ma_period
@@ -196,7 +198,7 @@ class KeltnerChannel(AbstractPriceIndicator):
 	def get_ma(self, series, period, ma_type='SMA'):
 		if ma_type == 'EMA':
 			return ExponentialMovingAverage(series, period)
-		elif ma_type = 'WMA':
+		elif ma_type == 'WMA':
 			return WeightedMovingAverage(series, period)
 
 		return  SimpleMovingAverage(series, period)
@@ -227,7 +229,7 @@ class KeltnerChannel(AbstractPriceIndicator):
 			return (self.kc_up, self.ma, self.kc_down)
 
 		self.ma = self.get_ma(self.prices, self.ma_period, self.ma_type).calculate()
-		atr = AverageTrueRange(self.prices, self.atr_period, self.atr_ma_type, self.atr_ma_type).calculate()
+		atr = AverageTrueRange(self.prices, self.high, self.low, self.atr_period, self.atr_ma_type).calculate()
 
 		for i in range(len(self.prices)):
 			self.kc_up.append(round(self.ma[i] + self.num_atr * atr[i]  , 2))
@@ -246,6 +248,21 @@ class StandardDeviation(VolatilityIndicator):
 		self.period = period
 		self.std = []
 
+	def standard_deviation(self, lst, population=True):
+		num_items = len(lst)
+		mean = sum(lst) / num_items
+		differences = [x - mean for x in lst]
+		sq_differences = [d ** 2 for d in differences]
+		ssd = sum(sq_differences)
+
+		if population is True:
+		    variance = ssd / num_items
+		else:
+		    variance = ssd / (num_items - 1)
+		sd = sqrt(variance)
+
+		return sd
+
 	def calculate(self):
 		if len(self.std) != 0:
 			return self.std
@@ -256,7 +273,7 @@ class StandardDeviation(VolatilityIndicator):
 			if i < self.period - 1:
 				self.std.append(0.00)
 			else:
-				std = statistics.stdev(self.prices[i - self.period + 1 : i + 1])
+				std = self.standard_deviation(self.prices[i - self.period + 1 : i + 1])
 				self.std.append(round(std, 2))
 
 		return self.std

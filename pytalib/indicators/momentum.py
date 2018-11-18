@@ -22,8 +22,11 @@ class RateOfChange(MomentumIndicator):
 			if i < self.period:
 				self.roc.append(0.00)
 			else:
-				self.roc.append(round((self.prices[i] - self.prices[i - self.period]) / self.prices[i - self.period], 2))
-
+				try:
+					self.roc.append(round((self.prices[i] - self.prices[i - self.period]) / self.prices[i - self.period], 2))
+				except:
+					self.roc.append(0.00)
+					
 		return self.roc
 
 class RelativeStrengthIndex(MomentumIndicator):
@@ -160,7 +163,7 @@ class StochasticOscillator(AbstractHighLowPriceIndicator):
 			else:
 				period_low = min(self.low[i - self.k_period + 1 : i + 1])
 				period_high = max(self.high[i - self.k_period + 1 : i + 1])
-				self.append(round( 100 * (self.prices[i] - period_low) / (period_high - period_low), 2))
+				self.stc.append(round( 100 * (self.prices[i] - period_low) / (period_high - period_low), 2))
 
 		return self.stc
 
@@ -187,7 +190,6 @@ class MoneyFlowIndex(AbstractHighLowPriceIndicator):
 	def __init__(self, prices=[], high=[], low=[], volume=[], period=14):
 		self.volume = volume
 		self.period = period
-		self.d_period = d_period
 		self.mfi = []
 		self.tp = []
 		self.raw_mf = []
@@ -203,7 +205,6 @@ class MoneyFlowIndex(AbstractHighLowPriceIndicator):
 		self.low = low
 		self.volume = volume
 		self.period = period
-		self.d_period = d_period
 		self.mfi = []
 		self.tp = []
 		self.raw_mf = []
@@ -254,7 +255,7 @@ class MoneyFlowIndex(AbstractHighLowPriceIndicator):
 			return (self.pos_mf, self.neg_mf)
 
 		raw_mf = self.get_raw_mf()
-		for i in range(self.prices):
+		for i in range(len(self.prices)):
 			if i == 0 or self.prices[i] == self.prices[i - 1]:
 				self.pos_mf.append(0.00)
 				self.neg_mf.append(0.00)
@@ -274,7 +275,7 @@ class MoneyFlowIndex(AbstractHighLowPriceIndicator):
 			return self.period_pos_mf
 
 		pos_mf, neg_mf = self.get_pos_neg_mf()
-		for i in range(self.prices):
+		for i in range(len(self.prices)):
 			if i < self.period + 1:
 				self.period_pos_mf.append(0.00)
 			else:
@@ -287,11 +288,11 @@ class MoneyFlowIndex(AbstractHighLowPriceIndicator):
 			return self.period_neg_mf
 
 		pos_mf, neg_mf = self.get_pos_neg_mf()
-		for i in range(self.prices):
+		for i in range(len(self.prices)):
 			if i < self.period + 1:
 				self.period_neg_mf.append(0.00)
 			else:
-				self.period_neg_mf.append(round(sum(neg_mf[i - self.period + 1: i + 1]), 2))
+				self.period_neg_mf.append(round(max(sum(neg_mf[i - self.period + 1: i + 1]), 1), 2))
 
 		return self.period_neg_mf
 
@@ -301,7 +302,7 @@ class MoneyFlowIndex(AbstractHighLowPriceIndicator):
 
 		period_pos_mf = self.get_period_pos_mf()
 		period_neg_mf = self.get_period_neg_mf()
-		for i in range(self.prices):
+		for i in range(len(self.prices)):
 			if i < self.period + 1:
 				self.mfi.append(0.00)
 			else:
@@ -350,15 +351,13 @@ class TrueStrengthIndex(AbstractPriceIndicator):
 		if len(self.momentum) != 0 and len(self.abs_momentum) != 0:
 			return (self.momentum, self.abs_momentum)
 
-		momentum = []
-		abs_momentum = []
 		for i in range(len(self.prices)):
 			if i == 0:
-				momentum.append(0)
-				abs_momentum.append(0)
+				self.momentum.append(0)
+				self.abs_momentum.append(0)
 			else:
-				momentum.append(self.prices[i] - self.prices[i - 1])
-				abs_momentum.append(abs(self.prices[i] - self.prices[i - 1]))
+				self.momentum.append(self.prices[i] - self.prices[i - 1])
+				self.abs_momentum.append(abs(self.prices[i] - self.prices[i - 1]))
 
 		return (self.momentum, self.abs_momentum)
 
@@ -368,14 +367,14 @@ class TrueStrengthIndex(AbstractPriceIndicator):
 
 		momentum, abs_momentum = self.get_momentums()
 
-		ema = ExponentialMovingAverage(momentum, r_period)
+		ema = ExponentialMovingAverage(momentum, self.r_period)
 		momentum_ema = ema.calculate()
-		ema.reset(momentum_ema, s_period)
+		ema.reset(momentum_ema, self.s_period)
 		smoothed_momentum_ema = ema.calculate()
 
-		ema.reset(abs_momentum_ema, r_period)
+		ema.reset(abs_momentum, self.r_period)
 		abs_momentum_ema = ema.calculate()
-		ema.reset(abs_momentum_ema, s_period)
+		ema.reset(abs_momentum_ema, self.s_period)
 		smoothed_abs_momentum_ema = ema.calculate()
 
 		for i in range(len(smoothed_momentum_ema)):
@@ -480,6 +479,8 @@ class UltimateOscillator(AbstractHighLowPriceIndicator):
 				period_avg.append(0.00)
 			else:
 				period_avg.append(round(sum(bp[i - period + 1 : i + 1]) / sum(tr[i - period + 1 : i + 1]), 2))
+		
+		return period_avg
 
 	def calculate(self):
 		if len(self.uo) != 0:
@@ -493,7 +494,7 @@ class UltimateOscillator(AbstractHighLowPriceIndicator):
 			if i < self.l_period:
 				self.uo.append(0.00)
 			else:
-				self.uo.append(round( 100 * ((self.s_weight * s_period_avg[i]) + (self.m_weight * m_period_avg[i]) + (self.l_weight * l_period_avg[i])) / (s_weight + m_weight + l_weight),2))
+				self.uo.append(round( 100 * ((self.s_weight * s_period_avg[i]) + (self.m_weight * m_period_avg[i]) + (self.l_weight * l_period_avg[i])) / (self.s_weight + self.m_weight + self.l_weight),2))
 
 		return self.uo
 

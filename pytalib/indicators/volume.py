@@ -37,7 +37,20 @@ class AccumulationDistributionLine(AbstractHighLowPriceIndicator):
 			return self.mf_multiplier
 
 		for i in range(len(self.prices)):
-			self.mf_multiplier.append(round(((self.prices[i] - self.low[i]) - (self.high[i] - self.prices[i])) / (self.high[i] - self.low[i]), 2))
+			try:
+				self.mf_multiplier.append(round(((self.prices[i] - self.low[i]) - (self.high[i] - self.prices[i])) / (self.high[i] - self.low[i]), 2))
+			except:
+				self.mf_multiplier.append(None)
+
+		max_mf_multiplier = float("-inf")
+		for i in range(len(self.mf_multiplier)):
+			if self.mf_multiplier[i]:
+				if self.mf_multiplier[i] > max_mf_multiplier:
+					max_mf_multiplier = self.mf_multiplier[i]
+
+		for i in range(len(self.mf_multiplier)):
+			if self.mf_multiplier[i] is None:
+				self.mf_multiplier[i] = max_mf_multiplier
 
 		return self.mf_multiplier
 
@@ -60,9 +73,9 @@ class AccumulationDistributionLine(AbstractHighLowPriceIndicator):
 		mf_volume = self.get_mf_volume()
 		for i in range(len(self.prices)):
 			if i == 0:
-				self.append(mf_volume[i])
+				self.adl.append(mf_volume[i])
 			else:
-				self.append(self.adl[i - 1] + mf_volume[i])
+				self.adl.append(self.adl[i - 1] + mf_volume[i])
 
 		return self.adl
 
@@ -111,7 +124,7 @@ class EaseOfMovement(AbstractHighLowPriceIndicator):
 	def get_ma(self, series, period, ma_type='SMA'):
 		if ma_type == 'EMA':
 			return ExponentialMovingAverage(series, period)
-		elif ma_type = 'WMA':
+		elif ma_type == 'WMA':
 			return WeightedMovingAverage(series, period)
 
 		return  SimpleMovingAverage(series, period)
@@ -133,7 +146,19 @@ class EaseOfMovement(AbstractHighLowPriceIndicator):
 			return self.box_ratio
 
 		for i in range(len(self.prices)):
-			self.box_ratio.append(round((self.volume[i] / 100000000) / (self.high[i] - self.low[i]) , 2))
+			try:
+				self.box_ratio.append(round((self.volume[i] / 100000000) / (self.high[i] - self.low[i]) , 2))
+			except:
+				self.box_ratio.append(None)
+
+		max_box_ratio = float("-inf")
+		for i in range(len(self.box_ratio)):
+			if self.box_ratio[i] is not None and self.box_ratio[i] > max_box_ratio:
+				max_box_ratio = self.box_ratio[i]
+
+		for i in range(len(self.box_ratio)):
+			if self.box_ratio[i] is None:
+				self.box_ratio[i] = max_box_ratio
 
 		return self.box_ratio
 
@@ -143,8 +168,14 @@ class EaseOfMovement(AbstractHighLowPriceIndicator):
 
 		distance = self.get_distance()
 		box_ratio = self.get_box_ratio()
+
+		min_box_ratio = float("inf")
+		for i in range(len(box_ratio)):
+			if box_ratio[i] > 0 and box_ratio[i] < min_box_ratio:
+				min_box_ratio = box_ratio[i]
+				
 		for i in range(len(self.prices)):
-			self.emv.append(round(distance[i] / box_ratio[i], 2))
+			self.emv.append(round(distance[i] / max(min_box_ratio, box_ratio[i]), 2))
 
 		return self.emv
 
@@ -198,7 +229,7 @@ class ForceIndex(AbstractPriceIndicator):
 	def get_ma(self, series, period, ma_type='SMA'):
 		if ma_type == 'EMA':
 			return ExponentialMovingAverage(series, period)
-		elif ma_type = 'WMA':
+		elif ma_type == 'WMA':
 			return WeightedMovingAverage(series, period)
 
 		return  SimpleMovingAverage(series, period)
@@ -233,6 +264,7 @@ class NegativeVolumeIndex(AbstractPriceIndicator):
 		self.period = period
 		self.nvi = []
 		self.signal = []
+		self.ma_type = ma_type
 		super().__init__(prices)
 
 	def reset(self, prices, volume, period=255, ma_type='EMA'):
@@ -241,6 +273,7 @@ class NegativeVolumeIndex(AbstractPriceIndicator):
 		self.period = period
 		self.nvi = []
 		self.signal = []
+		self.ma_type = ma_type
 
 	def validate(self):
 		self._validate()
@@ -263,7 +296,7 @@ class NegativeVolumeIndex(AbstractPriceIndicator):
 	def get_ma(self, series, period, ma_type='SMA'):
 		if ma_type == 'EMA':
 			return ExponentialMovingAverage(series, period)
-		elif ma_type = 'WMA':
+		elif ma_type == 'WMA':
 			return WeightedMovingAverage(series, period)
 
 		return  SimpleMovingAverage(series, period)
@@ -310,7 +343,6 @@ class OnBalanceVolume(AbstractPriceIndicator):
 
 	def __init__(self, prices, volume):
 		self.volume = volume
-		self.period = period
 		self.obv = []
 		super().__init__(prices)
 
