@@ -1,8 +1,30 @@
 import networkx as nx
 
 def ts2hvg(series):
-	pass
+	"""
+	convert time series to horizontal visibility graph
+
+	Reference:
+	B. Luque , L. Lacasa, F. Ballesteros and J. Luque, "Horizontal visibility graphs: exact results for random time series"
+	"""
+	hvg = nx.Graph()
+	hvg.add_nodes_from([i for i in range(len(series))])
+	stack = []
+	for i in range(len(series)):
+		if not stack:
+			stack.append((i , series[i]))
+		elif stack[-1][1] > series[i]:
+			hvg.add_edge(stack[-1][0], i)
+			stack.append((i , series[i]))
+		else:
+			while stack and stack[-1][1] < series[i]:
+				hvg.add_edge(i, stack.pop()[0])
+			if stack:
+				hvg.add_edge(stack[-1][0], i)
+			stack.append((i , series[i]))
 	
+	return hvg
+
 def ts2vg_basic(series):
 	"""
 	convert time series to visibility graph
@@ -60,3 +82,4 @@ def ts2vg_fast_helper(graph, series, left, right):
 
 		ts2vg_fast_helper(graph, series, left, k - 1)
 		ts2vg_fast_helper(graph, series, k + 1, right)
+
