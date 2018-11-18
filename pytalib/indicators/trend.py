@@ -533,8 +533,14 @@ class MassIndex(AbstractHighLowPriceIndicator):
 		single_ema = ema.calculate()
 		ema.reset(single_ema, self.ema_period)
 		double_ema = ema.calculate()
-		ema_ratio = [round(single_ema[i]/double_ema[i], 2) for i in range(len(single_ema))]
 
+		ema_ratio = []
+		for i in range(len(single_ema)):
+			if double_ema[i] == 0:
+				ema_ratio.append(0)
+			else:
+				ema_ratio.append(round(single_ema[i] / double_ema[i], 2))
+		
 		for i in range(len(ema_ratio)):
 			if i < self.mi_period - 1:
 				self.mi.append(0.00)
