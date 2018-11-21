@@ -233,7 +233,7 @@ class KeltnerChannel(AbstractHighLowPriceIndicator):
 
 		for i in range(len(self.prices)):
 			self.kc_up.append(round(self.ma[i] + self.num_atr * atr[i]  , 2))
-			self.kc_up.append(round(self.ma[i] - self.num_atr * atr[i]  , 2))
+			self.kc_down.append(round(self.ma[i] - self.num_atr * atr[i]  , 2))
 
 		return (self.kc_up, self.ma, self.kc_down)
 
