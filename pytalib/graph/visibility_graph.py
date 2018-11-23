@@ -1,4 +1,5 @@
 import networkx as nx
+from .utils import *
 
 def ts2hvg(series):
 	"""
@@ -83,3 +84,28 @@ def ts2vg_fast_helper(graph, series, left, right):
 		ts2vg_fast_helper(graph, series, left, k - 1)
 		ts2vg_fast_helper(graph, series, k + 1, right)
 
+def mhvgca_method(series_a, series_b, timescale=20):
+	"""
+	multiscale horizontal-visibility-graph correlation analysis
+
+	Reference:
+	Weidong Li and Xiaojun Zhao, "Multiscale horizontal-visibility-graph correlation analysis of stock time series" 2018 EPL 122 40007
+	"""
+	if len(series_a) != len(series_b):
+		raise Exception("`series_a` and `series_b` should have the same length!")
+	
+	degree_distribution_a = {}
+	degree_distribution_b = {}
+	G_s = []
+	for s in range(1, timescale + 1):
+		grained_a = coarse_grain_series(series_a, s)
+		grained_b = coarse_grain_series(series_b, s)
+		hvg_a = ts2hvg(grained_a)
+		hvg_b = ts2hvg(grained_b)
+		degree_sequence_a = [d for n, d in hvg_a.degree()]
+		degree_sequence_b = [d for n, d in hvg_a.degree()]
+
+		gamma = goodman_kruskal_gamma(degree_sequence_a, degree_sequence_b)
+		G_s.append(gamma)
+
+	return G_s
