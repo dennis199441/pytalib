@@ -8,7 +8,7 @@ def _concordance(x, y):
 	discordant = 0
 	tied = 0
 	for (i, j) in combinations(range(len(x)), 2):
-		if (x[i] < x[j] and y[i] < y[j]) or (x[i] > x[j] and y[i] > y[j]):
+		if (x[i] < x[j] and y[i] < y[j]) or (x[i] > x[j] and y[i] > y[j]) or (x[i] == x[j] and y[i] == y[j]):
 			concordant += 1
 		else:
 			discordant += 1
