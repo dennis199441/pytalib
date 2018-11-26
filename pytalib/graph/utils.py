@@ -1,4 +1,5 @@
 from itertools import combinations
+import math
 
 def _concordance(x, y):
 	if len(x) != len(y):
@@ -36,3 +37,46 @@ def coarse_grain_series(series, s):
 		i += s
 
 	return result_series
+
+def pearson_correlation(x, y):
+	if len(x) != len(y):
+		raise Exception("vector x and vector y should have same length!")
+
+	xsquares = sum([i ** 2 for i in x])
+	ysquares = sum([i ** 2 for i in y])
+
+	product_sum = 0
+	for i in range(len(x)):
+		product_sum += x[i] * y[i]
+
+	numerator = product_sum - ((sum(x) * sum(y))/len(x))
+	denominator = math.sqrt((xsquares - (sum(x) * sum(x)) / len(x)) * (ysquares - (sum(y) * sum(y)) / len(x)))
+
+	if denominator == 0:
+		return 0
+
+	return numerator / denominator
+	
+def euclidean_distance(x, y):
+	if len(x) != len(y):
+		raise Exception("vector x and vector y should have same length!")
+	
+	sqrted_sum = 0
+	for i in range(len(x)):
+		sqrted_sum += (x[i] - y[i]) ** 2
+
+	return math.sqrt(sqrted_sum)
+
+def consine_similarity(x, y):
+	if len(x) != len(y):
+		raise Exception("vector x and vector y should have same length!")
+	
+	dp = 0
+	xnorm = 0
+	ynorm = 0
+	for i in range(len(x)):
+		dp += x[i] * y[i]
+		xnorm += x[i] ** 2
+		ynorm += y[i] ** 2
+
+	return (dp / (math.sqrt(xnorm) * math.sqrt(ynorm)))
