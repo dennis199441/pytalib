@@ -84,7 +84,7 @@ def ts2vg_fast_helper(graph, series, left, right):
 		ts2vg_fast_helper(graph, series, left, k - 1)
 		ts2vg_fast_helper(graph, series, k + 1, right)
 
-def mhvgca_method(series_a, series_b, timescale=20):
+def mhvgca_method(series_a, series_b, timescale=20, correlation='gamma'):
 	"""
 	multiscale horizontal-visibility-graph correlation analysis
 
@@ -104,7 +104,16 @@ def mhvgca_method(series_a, series_b, timescale=20):
 		hvg_b = ts2hvg(grained_b)
 		degree_sequence_a = [d for n, d in hvg_a.degree()]
 		degree_sequence_b = [d for n, d in hvg_b.degree()]
-		gamma = goodman_kruskal_gamma(degree_sequence_a, degree_sequence_b)
-		G_s.append(gamma)
+
+		if correlation == 'euclidean':
+			correlation_coefficient = euclidean_distance(degree_sequence_a, degree_sequence_b)
+		elif correlation == 'cosine':
+			correlation_coefficient = cosine_similarity(degree_sequence_a, degree_sequence_b)
+		elif correlation == 'pearson':
+			correlation_coefficient = pearson_correlation(degree_sequence_a, degree_sequence_b)
+		else:
+			correlation_coefficient = goodman_kruskal_gamma(degree_sequence_a, degree_sequence_b)
+			
+		G_s.append(correlation_coefficient)
 
 	return G_s
