@@ -67,7 +67,7 @@ def euclidean_distance(x, y):
 
 	return math.sqrt(sqrted_sum)
 
-def consine_similarity(x, y):
+def cosine_similarity(x, y):
 	if len(x) != len(y):
 		raise Exception("vector x and vector y should have same length!")
 	
