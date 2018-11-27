@@ -105,9 +105,7 @@ def mhvgca_method(series_a, series_b, timescale=20, correlation='gamma'):
 		degree_sequence_a = [d for n, d in hvg_a.degree()]
 		degree_sequence_b = [d for n, d in hvg_b.degree()]
 
-		if correlation == 'cosine':
-			correlation_coefficient = cosine_similarity(degree_sequence_a, degree_sequence_b)
-		elif correlation == 'pearson':
+		if correlation == 'pearson':
 			correlation_coefficient = pearson_correlation(degree_sequence_a, degree_sequence_b)
 		else:
 			correlation_coefficient = goodman_kruskal_gamma(degree_sequence_a, degree_sequence_b)
