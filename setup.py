@@ -10,6 +10,7 @@ setup(
 	author_email='dennis199441@gmail.com',
 	install_requires=[
 		'networkx',
+		'scipy',
     ],
 	keywords=['pip','dennis','pytalib']
 )

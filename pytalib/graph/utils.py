@@ -38,6 +38,11 @@ def coarse_grain_series(series, s):
 
 	return result_series
 
+def test_statistics(n, r):
+	numerator = r * math.sqrt((n - 2))
+	denominator = math.sqrt((1 - r ** 2))
+	return (numerator / denominator)
+
 def pearson_correlation(x, y):
 	if len(x) != len(y):
 		raise Exception("vector x and vector y should have same length!")

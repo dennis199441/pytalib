@@ -1,6 +1,6 @@
 import networkx as nx
 from .utils import *
-
+from scipy.stats import t
 def ts2hvg(series):
 	"""
 	convert time series to horizontal visibility graph
@@ -84,7 +84,7 @@ def ts2vg_fast_helper(graph, series, left, right):
 		ts2vg_fast_helper(graph, series, left, k - 1)
 		ts2vg_fast_helper(graph, series, k + 1, right)
 
-def mhvgca_method(series_a, series_b, timescale=20, correlation='gamma'):
+def mhvgca_method(series_a, series_b, timescale=20):
 	"""
 	multiscale horizontal-visibility-graph correlation analysis
 
@@ -97,6 +97,7 @@ def mhvgca_method(series_a, series_b, timescale=20, correlation='gamma'):
 	degree_distribution_a = {}
 	degree_distribution_b = {}
 	G_s = []
+	P_s = []
 	for s in range(1, timescale + 1):
 		grained_a = coarse_grain_series(series_a, s)
 		grained_b = coarse_grain_series(series_b, s)
@@ -105,11 +106,15 @@ def mhvgca_method(series_a, series_b, timescale=20, correlation='gamma'):
 		degree_sequence_a = [d for n, d in hvg_a.degree()]
 		degree_sequence_b = [d for n, d in hvg_b.degree()]
 
-		if correlation == 'pearson':
-			correlation_coefficient = pearson_correlation(degree_sequence_a, degree_sequence_b)
-		else:
-			correlation_coefficient = goodman_kruskal_gamma(degree_sequence_a, degree_sequence_b)
-			
+		correlation_coefficient = goodman_kruskal_gamma(degree_sequence_a, degree_sequence_b)
+		df = len(degree_sequence_a) - 2
+		try:
+			t_stat = test_statistics(len(degree_sequence_a), correlation_coefficient)
+			pvalue = 2 * (1 - t.cdf(abs(t_stat), df))
+		except:
+			pvalue = 1
+
+		P_s.append(pvalue)
 		G_s.append(correlation_coefficient)
 
-	return G_s
+	return G_s, P_s
