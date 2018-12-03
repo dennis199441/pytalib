@@ -62,9 +62,9 @@ Reference: "Fast transformation from time series to visibility graphs" by Xin La
 Reference: "Horizontal visibility graphs: exact results for random time series" by B. Luque , L. Lacasa, F. Ballesteros and J. Luque
 
 ## How to install
-Pytalib has been published on Test Python Package Index (TestPyPi) yet. Pytalib can be installed using the following command.
+Pytalib has been published on Python Package Index (PyPi). Pytalib can be installed using the following command.
 ```
-pip install --index-url https://test.pypi.org/simple/ pytalib
+pip install pytalib
 ```
 
 ## Example Code
