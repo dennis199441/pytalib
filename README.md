@@ -5,8 +5,8 @@ Pytalib is a python technical analysis library developed CMSC5720 project group 
 Python 3.6.4
 
 ## Dependencies
-Networkx
-Scipy
+  1. Networkx
+  2. Scipy
 
 ## Types of indicators
 #### Trend indicators
