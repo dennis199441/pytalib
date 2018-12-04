@@ -8,6 +8,12 @@ Python 3.6.4
   1. Networkx
   2. Scipy
 
+## How to install
+Pytalib has been published on Python Package Index (PyPi). Pytalib can be installed using the following command.
+```
+pip install pytalib
+```
+
 ## Types of indicators
 #### Trend indicators
   1. Moving Average Convergence Divergence
@@ -49,23 +55,24 @@ Python 3.6.4
 ## Visibility Graph Algorithm
 Implementations the following time series-to-graph algorithm which takes the time series as parameter and returns a networkx undirected graph.
 
-1. ts2vg_basic
+1. ts2vg_basic(series)
   
 Reference: "From time series to complex networks: The visibility graph" by L. Lacasa, B. Luque, F. Ballesteros, J. Luque, and J. C. Nuno
 
-2. ts2vg_fast
+2. ts2vg_fast(series)
   
 Reference: "Fast transformation from time series to visibility graphs" by Xin Lan, Hongming Mo, Shiyu Chen, Qi Liu, and Yong Deng
 
-3. ts2hvg
+3. ts2hvg(series)
 
 Reference: "Horizontal visibility graphs: exact results for random time series" by B. Luque , L. Lacasa, F. Ballesteros and J. Luque
 
-## How to install
-Pytalib has been published on Python Package Index (PyPi). Pytalib can be installed using the following command.
-```
-pip install pytalib
-```
+## Correlation analysis
+Implementation of multiscale horizontal-visibility-graph correlation analysis (MHVGCA) that utilised horizontal visibility graph and degree sequence similarity to estimate the correlation between time series under specific time scale.
+
+1. mhvgca_method(series_a, series_b, timescale=20)
+
+Reference: "Multiscale horizontal-visibility-graph correlation analysis of stock time series" by Weidong Li and Xiaojun Zhao
 
 ## Example Code
 #### Calculate indicators
