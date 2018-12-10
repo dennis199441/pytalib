@@ -117,8 +117,8 @@ class BollingerBands(AbstractPriceIndicator):
 		std = StandardDeviation(self.prices, self.period).calculate()
 
 		for i in range(len(self.prices)):
-			self.bb_up.append(round(self.prices[i] + self.num_std * std[i], 2))
-			self.bb_down.append(round(self.prices[i] - self.num_std * std[i], 2))
+			self.bb_up.append(round(self.ma[i] + self.num_std * std[i], 2))
+			self.bb_down.append(round(self.ma[i] - self.num_std * std[i], 2))
 
 		return (self.bb_up, self.ma, self.bb_down)
 
